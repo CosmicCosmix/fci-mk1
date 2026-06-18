@@ -4,7 +4,9 @@ import '../assets/css/animate.css';
 import '../assets/css/lineicons.css';
 import '../assets/css/bootstrap.min.css';
 import '../assets/css/default.css';
-import '../assets/css/style.css';
+// import '../assets/css/style.css';
+// -- Uncomment it to fix the landing page.
+// -- Might replace this landing page with the Dashboard's Material Dashboard 3's template.
 
 import logo from '../assets/images/tbglogo.png';
 import heroImg from '../assets/images/hero.png';
@@ -70,12 +72,12 @@ function LandingPage() {
 
         const initScripts = async () => {
             try {
-                await loadScript('/src/assets/js/vendor/jquery-1.12.4.min.js');
-                await loadScript('/src/assets/js/bootstrap.min.js');
-                await loadScript('/src/assets/js/jquery.appear.min.js');
-                await loadScript('/src/assets/js/jquery.easing.min.js');
-                await loadScript('/src/assets/js/scrolling-nav.js');
-                await loadScript('/src/assets/js/main.js');
+                await loadScript('/js/vendor/jquery-1.12.4.min.js');
+                await loadScript('/js/bootstrap.min.js');
+                await loadScript('/js/jquery.appear.min.js');
+                await loadScript('/js/jquery.easing.min.js');
+                await loadScript('/js/scrolling-nav.js');
+                await loadScript('/js/main.js');
             } catch (err) {
                 console.warn('Template script load error:', err);
             }

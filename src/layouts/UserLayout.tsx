@@ -1,15 +1,29 @@
 import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
-import '../assets/css/material-dashboard.css'; // Importing the layout CSS based on your project tree
+import { Outlet, useLocation, Link } from 'react-router-dom';
+import '../assets/css/material-dashboard.css';
+import '../assets/css/nucleo-icons.css';
+import '../assets/css/nucleo-svg.css';
+// import logoCtDark from '../assets/images/logo-ct-dark.png';
+import logo from '../assets/images/tbglogo.png';
+import team2 from '../assets/images/team-2.jpg';
 
 const UserLayout: React.FC = () => {
-  // Optional: Initialize smooth-scrollbar if running on Windows, exactly as the template did
+  const location = useLocation();
+
+  // Split the pathname into an array (e.g., "/Userdashboard/course" -> ["Userdashboard", "course"])
+  const pathnames = location.pathname.split('/').filter((x) => x);
+
+  // Helper to format the URL string nicely
+  const formatBreadcrumb = (str: string) => {
+    if (str.toLowerCase() === 'userdashboard') return 'Dashboard';
+    // Capitalize the first letter and replace hyphens with spaces
+    return str.charAt(0).toUpperCase() + str.slice(1).replace(/-/g, ' ');
+  };
+
   useEffect(() => {
     const win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
-      // Note: You will need to import Scrollbar from 'smooth-scrollbar' if you wish to use this functionality
-      // const Scrollbar = require('smooth-scrollbar');
-      // Scrollbar.init(document.querySelector('#sidenav-scrollbar'), { damping: '0.5' });
+      // Scrollbar init logic
     }
   }, []);
 
@@ -32,14 +46,8 @@ const UserLayout: React.FC = () => {
                 target="_blank"
                 rel="noreferrer"
             >
-              <img
-                  src="../assets/images/logo-ct-dark.png"
-                  className="navbar-brand-img"
-                  width="26"
-                  height="26"
-                  alt="main_logo"
-              />
-              <span className="ms-1 text-sm text-dark">Creative Tim</span>
+              <img src={logo} className="navbar-brand-img" width="26" height="26" alt="main_logo" />
+              <span className="ms-1 text-sm text-dark">FCI</span>
             </a>
           </div>
           <hr className="horizontal dark mt-0 mb-2" />
@@ -135,18 +143,37 @@ const UserLayout: React.FC = () => {
               data-scroll="true"
           >
             <div className="container-fluid py-1 px-3">
+              {/* --- DYNAMIC BREADCRUMB START --- */}
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                  {/* Static Root Item */}
                   <li className="breadcrumb-item text-sm">
-                    <a className="opacity-5 text-dark" href="#!">
+                    <Link className="opacity-5 text-dark" to="/Userdashboard">
                       Pages
-                    </a>
+                    </Link>
                   </li>
-                  <li className="breadcrumb-item text-sm text-dark active" aria-current="page">
-                    Dashboard
-                  </li>
+
+                  {/* Dynamic Items based on URL */}
+                  {pathnames.map((value, index) => {
+                    const isLast = index === pathnames.length - 1;
+                    const to = `/${pathnames.slice(0, index + 1).join('/')}`;
+                    const title = formatBreadcrumb(value);
+
+                    return isLast ? (
+                        <li className="breadcrumb-item text-sm text-dark active" aria-current="page" key={to}>
+                          {title}
+                        </li>
+                    ) : (
+                        <li className="breadcrumb-item text-sm" key={to}>
+                          <Link className="opacity-5 text-dark" to={to}>
+                            {title}
+                          </Link>
+                        </li>
+                    );
+                  })}
                 </ol>
               </nav>
+              {/* --- DYNAMIC BREADCRUMB END --- */}
               <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                 <div className="ms-md-auto pe-md-3 d-flex align-items-center">
                   <div className="input-group input-group-outline">
@@ -173,7 +200,7 @@ const UserLayout: React.FC = () => {
                         <a className="dropdown-item border-radius-md" href="#!">
                           <div className="d-flex py-1">
                             <div className="my-auto">
-                              <img src="../assets/images/team-2.jpg" className="avatar avatar-sm me-3" alt="team" />
+                              <img src={team2} className="avatar avatar-sm me-3" alt="team" />
                             </div>
                             <div className="d-flex flex-column justify-content-center">
                               <h6 className="text-sm font-weight-normal mb-1">
@@ -262,27 +289,53 @@ const UserLayout: React.FC = () => {
           </nav>
           {/* End Navbar */}
 
-          {/* Dynamic Route Content (UserDashboard goes here) */}
-          <Outlet />
-        </main>
+          {/* Dynamic Route Content */}
+          <div style={{ overflowX: "hidden" }}>
+            <Outlet />
+          </div>
 
-        {/* Settings Plugin Configurator */}
-        <div className="fixed-plugin">
-          <div className="card shadow-lg">
-            <div className="card-header pb-0 pt-3">
-              <div className="float-start">
-                <h5 className="mt-3 mb-0">Material UI Configurator</h5>
-                <p>See our dashboard options.</p>
-              </div>
-              <div className="float-end mt-4">
-                <button className="btn btn-link text-dark p-0 fixed-plugin-close-button">
-                  <i className="material-symbols-rounded">clear</i>
-                </button>
+          {/* Footer (Moved from UserDashboard) */}
+          <footer className="footer py-4">
+            <div className="container-fluid">
+              <div className="row align-items-center justify-content-lg-between">
+                <div className="col-lg-6 mb-lg-0 mb-4">
+                  <div className="copyright text-center text-sm text-muted text-lg-start">
+                    Copyright © {new Date().getFullYear()}&nbsp;
+                    <a href="http://financialcampusindia.com" className="font-weight-bold" target="_blank" rel="noreferrer">
+                      Financial Campus India
+                    </a>{' '}
+                    . All rights reserved.
+                  </div>
+                </div>
+                <div className="col-lg-6">
+                  <ul className="nav nav-footer justify-content-center justify-content-lg-end">
+                    <li className="nav-item">
+                      <a href="https://www.creative-tim.com" className="nav-link text-muted" target="_blank" rel="noreferrer">
+                        Creative Tim
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="https://www.creative-tim.com/presentation" className="nav-link text-muted" target="_blank" rel="noreferrer">
+                        About Us
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="https://www.creative-tim.com/blog" className="nav-link text-muted" target="_blank" rel="noreferrer">
+                        Blog
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="https://www.creative-tim.com/license" className="nav-link pe-0 text-muted" target="_blank" rel="noreferrer">
+                        License
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-            <hr className="horizontal dark my-1" />
-          </div>
-        </div>
+          </footer>
+
+        </main>
       </div>
   );
 };

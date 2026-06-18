@@ -1,10 +1,9 @@
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-// Import your page components
-import LandingPage from './pages/LandingPage'; // Adjust path as needed
-import UserLayout from './layouts/UserLayout'; // The layout we created earlier
-import UserDashboard from './pages/user/UserDashboard'; // The dashboard we created earlier
+import LandingPage from './pages/LandingPage';
+import UserLayout from './layouts/UserLayout';
+import UserDashboard from './pages/user/UserDashboard';
+import UserCourse from "./pages/user/UserCourse";
+import UserLesson from "./pages/user/UserLesson";
 
 function App() {
     return (
@@ -17,8 +16,8 @@ function App() {
                 <Route path="/Userdashboard" element={<UserLayout />}>
                     {/* The 'index' route renders UserDashboard inside the UserLayout Outlet by default */}
                     <Route index element={<UserDashboard />} />
-
-                    {/* You can easily add more nested routes later, e.g.: */}
+                    <Route path="course" element={<UserCourse />}/> {/* -- path is not URL path. Isme jo naam hai, that is "course", what is defined only once in UserDashboard.tsx as <Link to="/UserDashboard/course" */}
+                    <Route path="course/lesson" element={<UserLesson />}/>
                     {/* <Route path="profile" element={<UserProfile />} /> */}
                 </Route>
             </Routes>
