@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import '../assets/css/material-dashboard.css';
 import '../assets/css/nucleo-icons.css';
 import '../assets/css/nucleo-svg.css';
-// import logoCtDark from '../assets/images/logo-ct-dark.png';
 import logo from '../assets/images/tbglogo.png';
 import team2 from '../assets/images/team-2.jpg';
 
 const UserLayout: React.FC = () => {
   const location = useLocation();
+
+  // --- ADDED STATE FOR SEARCH BAR FLOATING LABEL ---
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
   // Split the pathname into an array (e.g., "/Userdashboard/course" -> ["Userdashboard", "course"])
   const pathnames = location.pathname.split('/').filter((x) => x);
@@ -136,6 +139,7 @@ const UserLayout: React.FC = () => {
 
         {/* Main Content Wrapper */}
         <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+
           {/* Top Navbar */}
           <nav
               className="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl"
@@ -174,12 +178,24 @@ const UserLayout: React.FC = () => {
                 </ol>
               </nav>
               {/* --- DYNAMIC BREADCRUMB END --- */}
+
               <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                 <div className="ms-md-auto pe-md-3 d-flex align-items-center">
-                  <div className="input-group input-group-outline">
+
+                  {/* --- UPDATED SEARCH BAR WITH DYNAMIC CLASSES --- */}
+                  <div className={`input-group input-group-outline ${searchFocused ? 'is-focused' : ''} ${searchValue ? 'is-filled' : ''}`}>
                     <label className="form-label">Type here...</label>
-                    <input type="text" className="form-control" />
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={searchValue}
+                        onFocus={() => setSearchFocused(true)}
+                        onBlur={() => setSearchFocused(false)}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                    />
                   </div>
+                  {/* --------------------------------------------- */}
+
                 </div>
                 <ul className="navbar-nav d-flex align-items-center justify-content-end">
                   <li className="nav-item dropdown pe-3 d-flex align-items-center">
@@ -294,7 +310,7 @@ const UserLayout: React.FC = () => {
             <Outlet />
           </div>
 
-          {/* Footer (Moved from UserDashboard) */}
+          {/* Footer */}
           <footer className="footer py-4">
             <div className="container-fluid">
               <div className="row align-items-center justify-content-lg-between">
